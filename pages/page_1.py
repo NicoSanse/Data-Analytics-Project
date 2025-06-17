@@ -123,7 +123,7 @@ for mid, g in dialogs.groupby("Movie ID"):
 
 layout = html.Div(
     [
-        html.H1("Prima parte"),
+        html.H1("Introduzione"),
         html.H2("Analisi su grafo dell'interazione dei personaggi"),
         html.Div(
             [
