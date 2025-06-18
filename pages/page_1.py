@@ -125,6 +125,12 @@ layout = html.Div(
     [
         html.H1("Introduzione"),
         html.H2("Analisi su grafo dell'interazione dei personaggi"),
+        html.P(
+            "Iniziamo con una visione di insieme sul dataset. Riportiamo il grafo rappresentante l'interazione tra personaggi "
+            "e la loro intensità. Tanto più un nodo è importante, secondo Pagerank, tanto più sarà in primo piano, mentre è possibile "
+            "regolare il peso degli archi per filtrare i risultati.",
+            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em"},
+        ),
         html.Div(
             [
                 html.Label("Tipo di visualizzazione:"),
@@ -166,9 +172,10 @@ layout = html.Div(
             style={"margin": "40px"},
         ),
         dcc.Graph(id="indicator-graphic"),
-        html.Button("Prossima pagina →", id="next-page-1", n_clicks=0),
-        dcc.Location(id="page-2-url"),
-    ]
+        html.Button("Prossima pagina →", id="next-page", n_clicks=0),
+        dcc.Location(id="from-page-1-to-page-2-url"),
+    ],
+    style={"padding": "10px"},
 )
 
 
@@ -193,8 +200,8 @@ def update_graph(mid, view_type, cut_threshold):
 
 # Callback per routing tra tutte le pagine
 @callback(
-    Output("page-2-url", "pathname"),
-    Input("next-page-1", "n_clicks"),
+    Output("from-page-1-to-page-2-url", "pathname"),
+    Input("next-page", "n_clicks"),
     prevent_initial_call=True,
     allow_duplicate=True,
 )

@@ -15,13 +15,13 @@ dash.register_page(__name__)
 
 layout = html.Div(
     [
-        html.H1("Parte 1.2"),
+        html.H1("Parte 4"),
         html.Div(
             [
                 html.Button("← Pagina precedente", id="prev-page", n_clicks=0),
-                dcc.Location(id="from-page-3-to-page-2-url"),
+                dcc.Location(id="from-page-7-to-page-6-url"),
                 html.Button("Prossima pagina →", id="next-page", n_clicks=0),
-                dcc.Location(id="from-page-3-to-page-4-url"),
+                dcc.Location(id="from-page-7-to-page-end-url"),
             ],
             style={"marginTop": "30px", "display": "flex", "gap": "10px"},
         ),
@@ -34,21 +34,21 @@ layout = html.Div(
 
 
 @callback(
-    Output("from-page-3-to-page-4-url", "pathname"),
+    Output("from-page-7-to-page-end-url", "pathname"),
     Input("next-page", "n_clicks"),
     prevent_initial_call=True,
     allow_duplicate=True,
 )
 def go_to_next_page(n_clicks):
     # se la presentazione è finita, mettere /end
-    return "/page-4"
+    return "/end"
 
 
 @callback(
-    Output("from-page-3-to-page-2-url", "pathname"),
+    Output("from-page-7-to-page-6-url", "pathname"),
     Input("prev-page", "n_clicks"),
     prevent_initial_call=True,
     allow_duplicate=True,
 )
 def go_to_previous_page(n_clicks):
-    return "/page-2"
+    return "/page-6"
