@@ -12,14 +12,14 @@ import networkx as nx
 dash.register_page(__name__)
 
 
-def create_plot(top_n, emotions):
+def create_line_plot(top_n, film_id, emotions):
 
     df_emotions = pd.read_csv(
-        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/df_emotions.csv",
+        "outputs/df_emotions.csv",
         encoding="utf-8-sig",
     )
     dialogs = pd.read_csv(
-        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/dialogs_bert_sentiment.csv",
+        "outputs/dialogs_bert_sentiment.csv",
         encoding="utf-8-sig",
     )
 
@@ -62,36 +62,50 @@ def create_plot(top_n, emotions):
         .sort_values(ascending=False)
     )
     central_characters = pagerank_by_char.head(top_n).index.tolist()
+    # emotion_order = ["sadness", "love", "joy", "anger", "fear", "surprise"] KeyError: 'love' not in index
+    emotion_order = emotions
 
     plots = []
 
+    chapters = df_emotions[df_emotions["Movie ID"] == film_id]["Chapter ID"].unique()
+
     for character in central_characters:
+        subset = df_emotions[
+            (df_emotions["Movie ID"] == film_id)
+            & (df_emotions["Character Name"] == character)
+        ]
+        if subset.empty:
+            continue
 
-        char_data = df_emotions[df_emotions["Character Name"] == character]
+        # Conta emozioni per capitolo
+        pivot = subset.groupby(["Chapter ID", "Emotion"]).size().unstack(fill_value=0)
+        pivot = pivot.reindex(chapters, fill_value=0)
 
-        fig = px.histogram(
-            char_data,
-            x="Movie ID",
+        # Dopo l'unstack
+        for emo in emotion_order:
+            if emo not in pivot.columns:
+                pivot[emo] = 0
+
+        # Re-ordina le colonne
+        pivot = pivot[emotion_order]
+
+        pivot_long = pivot.reset_index().melt(
+            id_vars="Chapter ID",
+            value_vars=emotion_order,
+            var_name="Emotion",
+            value_name="Count",
+        )
+
+        fig = px.line(
+            pivot_long,
+            x="Chapter ID",
+            y="Count",
             color="Emotion",
-            barmode="group",
-            category_orders={"Movie ID": sorted(char_data["Movie ID"].unique())},
-            title=f"Andamento delle emozioni per {character} nei vari film",
-            labels={"Movie ID": "Film", "count": "Conteggio emozioni"},
+            title=f"Andamento delle emozioni per {character} in '{film_id}'",
+            labels={"Chapter": "Capitolo", "Count": "Conteggio"},
         )
 
-        for trace in fig.data:
-            if trace.name not in emotions:
-                trace.opacity = 0.2
-            else:
-                trace.opacity = 1.0
-
-        fig.update_layout(
-            legend_title_text="Emozione",
-            xaxis_title="Film",
-            yaxis_title="Conteggio emozioni",
-            bargap=0.2,
-            margin=dict(t=60),
-        )
+        fig.update_layout(legend_title_text="Emozione")
 
         plots.append(fig)
 
@@ -106,6 +120,10 @@ layout = html.Div(
         html.Div(
             html.Div(
                 children=[
+                    html.Label(
+                        "Emozioni selezionabili:",
+                        style={"fontWeight": "bold", "marginBottom": "5px"},
+                    ),
                     dcc.Dropdown(
                         id="emotion-multiselect",
                         options=[
@@ -116,27 +134,36 @@ layout = html.Div(
                             {"label": "love", "value": "love"},
                             {"label": "surprise", "value": "surprise"},
                         ],
-                        value=["joy", "anger", "fear", "sadness"],
+                        value=["joy", "anger", "fear"],
                         multi=True,
                         clearable=False,
                         placeholder="Seleziona le emozioni da visualizzare",
-                        style={"width": "30%"},
+                        style={"width": "50%"},
                     ),
-                    html.Div(
-                        children=[
-                            html.Label(
-                                "Top risultati:",
-                                style={"fontWeight": "bold", "marginBottom": "5px"},
-                            ),
-                            dcc.Input(
-                                id="top-n",
-                                type="number",
-                                min=1,
-                                step=1,
-                                value=3,
-                                style={"width": "100px"},
-                            ),
-                        ]
+                    html.Label(
+                        "Top risultati:",
+                        style={"fontWeight": "bold", "marginBottom": "5px"},
+                    ),
+                    dcc.Input(
+                        id="top-n",
+                        type="number",
+                        min=1,
+                        step=1,
+                        value=3,
+                        style={"width": "100px"},
+                    ),
+                    html.Label(
+                        "Movie ID:",
+                        style={"fontWeight": "bold", "marginBottom": "5px"},
+                    ),
+                    dcc.Input(
+                        id="movie-id",
+                        type="number",
+                        min=1,
+                        max=8,
+                        step=1,
+                        value=1,
+                        style={"width": "100px"},
                     ),
                 ],
                 style={"display": "flex", "gap": "20px"},
@@ -170,11 +197,12 @@ layout = html.Div(
     Output("plots-container", "children"),
     [
         Input("top-n", "value"),
+        Input("movie-id", "value"),
         Input("emotion-multiselect", "value"),
     ],
 )
-def update_graph(character, emotions):
-    plots = create_plot(character, emotions)
+def update_line_plot(top_n, movie_id, emotions):
+    plots = create_line_plot(top_n, movie_id, emotions)
     children = []
     for fig in plots:
         children.append(dcc.Graph(figure=fig))

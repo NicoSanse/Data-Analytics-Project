@@ -15,25 +15,33 @@ from collections import defaultdict
 from dash.dependencies import Input, Output
 import dash
 from dash import Input, Output, html, dcc, callback
+import os
 
 dash.register_page(__name__)
 
 ###############################################################################################
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+file_path = os.path.join(BASE_DIR, "Harry_Potter_Movies", "Characters.csv")
+
+characters = pd.read_csv(file_path, encoding="latin-1")
+
+
 characters = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Characters.csv",
+    "Harry_Potter_Movies/Characters.csv",
     encoding="latin-1",
 )
 movies = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Movies.csv",
+    "Harry_Potter_Movies/Movies.csv",
     encoding="utf-8-sig",
 )
 dialogues = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Dialogue.csv",
+    "Harry_Potter_Movies/Dialogue.csv",
     encoding="latin-1",
 )
 chapters = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Chapters.csv",
+    "Harry_Potter_Movies/Chapters.csv",
     encoding="latin-1",
 )
 
