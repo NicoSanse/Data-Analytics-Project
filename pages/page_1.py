@@ -5,6 +5,7 @@ from dash import html
 import pandas as pd
 import plotly.graph_objs as go
 import pandas as pd
+import numpy as np
 import re
 import csv
 import networkx as nx
@@ -171,7 +172,14 @@ layout = html.Div(
             ],
             style={"margin": "40px"},
         ),
-        dcc.Graph(id="indicator-graphic"),
+        html.Div(
+            dcc.Graph(id="indicator-graphic"),
+            style={
+                "display": "flex",
+                "justifyContent": "center",
+                "alignItems": "center",
+            },
+        ),
         html.Button("Prossima pagina →", id="next-page", n_clicks=0),
         dcc.Location(id="from-page-1-to-page-2-url"),
     ],
@@ -372,35 +380,97 @@ def networkx_to_plotly(G, cut_threshold):
             annotations=annotations,
         ),
     )
+
+    fig.update_layout(width=1200, height=600)
+
     return fig
 
 
 def plot_heatmap(G, cut_threshold):
     adj_matrix = nx.to_pandas_adjacency(G, weight="weight")
 
-    total_interactions = {
-        node: sum(G[node][nbr]["weight"] for nbr in G.successors(node))
-        + sum(G[pre][node]["weight"] for pre in G.predecessors(node))
-        for node in G.nodes()
-    }
+    mask_rows = (adj_matrix > cut_threshold).any(axis=1)
+    mask_cols = (adj_matrix > cut_threshold).any(axis=0)
+    keep = mask_rows | mask_cols
+    filtered_matrix = adj_matrix.loc[keep, keep]
 
-    def format_label(name):
-        return f"<b>{name}</b>" if total_interactions[name] >= cut_threshold else name
+    z = filtered_matrix.values
+    x = filtered_matrix.columns.tolist()
+    y = filtered_matrix.index.tolist()
 
-    formatted_x = [format_label(name) for name in adj_matrix.columns]
-    formatted_y = [format_label(name) for name in adj_matrix.index]
+    n = filtered_matrix.shape[0]
+    font_size = max(8, 75 / n)  # font dinamico simile a matplotlib
 
+    # Crea lista colori con 0 trasparente (bianco)
+    # Plotly non supporta colore "under" come matplotlib, quindi gestiamo manualmente
+    colorscale = "YlOrRd"
+    z_text = np.round(z, 2).astype(str)
+
+    # Costruzione figure
     fig = go.Figure(
         data=go.Heatmap(
-            z=adj_matrix.values,
-            x=formatted_x,
-            y=formatted_y,
-            colorscale="YlOrRd",
+            z=z,
+            x=x,
+            y=y,
+            colorscale=colorscale,
+            zmin=0.01,  # fa sì che 0 sia trasparente
+            colorbar=dict(title="Valore"),
+            text=z_text,
+            texttemplate="%{text}",
+            textfont={"size": font_size, "color": "black"},
+            hoverongaps=False,
+            hovertemplate="Personaggio X: %{x}<br>Personaggio Y: %{y}<br>Valore: %{z}<extra></extra>",
         )
     )
+
+    # Bordo spesso per celle > soglia: lo simuliamo con shape rettangoli
+    # Dimensioni celle: 1 unità ciascuna, origin (0,0) bottom-left
+    for i in range(n):
+        for j in range(n):
+            if z[i, j] > cut_threshold:
+                fig.add_shape(
+                    type="rect",
+                    x0=j - 0.5,
+                    y0=i - 0.5,
+                    x1=j + 0.5,
+                    y1=i + 0.5,
+                    line=dict(color="black", width=2),
+                    xref="x",
+                    yref="y",
+                )
+
+    # Aggiorna asse x (etichetta in grassetto se colonna > cut_threshold)
+    x_tickvals = x
+    x_ticktexts = []
+    for j in range(n):
+        if (filtered_matrix.iloc[:, j] > cut_threshold).any():
+            x_ticktexts.append(f"<b>{x[j]}</b>")
+        else:
+            x_ticktexts.append(x[j])
+
+    # Aggiorna asse y (idem righe)
+    y_tickvals = y
+    y_ticktexts = []
+    for i in range(n):
+        if (filtered_matrix.iloc[i, :] > cut_threshold).any():
+            y_ticktexts.append(f"<b>{y[i]}</b>")
+        else:
+            y_ticktexts.append(y[i])
+
     fig.update_layout(
-        title="Heatmap delle interazioni tra personaggi",
-        xaxis_title="Personaggio",
-        yaxis_title="Personaggio",
+        title="Heatmap delle interazioni sopra soglia",
+        xaxis=dict(
+            tickmode="array", tickvals=x_tickvals, ticktext=x_ticktexts, tickangle=-60
+        ),
+        yaxis=dict(
+            tickmode="array",
+            tickvals=y_tickvals,
+            ticktext=y_ticktexts,
+            autorange="reversed",
+        ),
+        margin=dict(l=150, r=50, t=100, b=150),
+        height=600,
+        width=800,
     )
+
     return fig
