@@ -6,122 +6,241 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
+from scipy.stats import entropy
 
 
 dash.register_page(__name__)
 
 
-def plot(criterion, number_films, top_k):
-    emotional_characters = pd.read_csv(
-        "outputs/emotional_characters.csv",
+def plot(top_k):
+
+    agg_tabella = pd.read_csv(
+        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/agg_tabella.csv",
         encoding="utf-8-sig",
     )
     dialogs = pd.read_csv(
-        "outputs/dialogs_bert_vader.csv"
+        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/dialogs_bert_sentiment.csv",
+        encoding="utf-8-sig",
+    )
+    best_characters = agg_tabella.head(top_k)["speaker_lower"].tolist()
+
+    def bert_entropy_for_group(df):
+        binned = pd.cut(
+            df["bert_sentiment"],
+            bins=[0.5, 2.5, 3.5, 5.5],
+            labels=["neg", "neu", "pos"],
+        )
+        probs = binned.value_counts(normalize=True)
+        return entropy(probs)
+
+    entropy_line = (
+        dialogs.copy()
+        .assign(speaker_lower=lambda d: d["speaker"].str.lower().str.strip())
+        .query("speaker_lower in @best_characters")
+        .groupby(["Movie ID", "speaker_lower"])
+        .apply(bert_entropy_for_group)
+        .reset_index(name="bert_entropy")
+    )
+    entropy_line = entropy_line.merge(
+        agg_tabella[["speaker_lower", "Character_Name"]], on="speaker_lower", how="left"
     )
 
-    filtered = emotional_characters[
-        emotional_characters["num_films"] >= int(number_films)
+    fig = px.line(
+        entropy_line,
+        x="Movie ID",
+        y="bert_entropy",
+        color="Character_Name",
+        markers=True,
+        title="Andamento Entropia (BERT) nei migliori personaggi secondari attivi",
+        labels={
+            "bert_entropy": "Entropia BERT",
+            "Movie ID": "Movie ID",
+            "Character_Name": "Personaggio",
+        },
+    )
+
+    fig.update_layout(
+        legend_title_text="Personaggio",
+        legend=dict(x=1.02, y=1, bordercolor="Black", borderwidth=1),
+        margin=dict(r=200),
+    )
+
+    return fig
+
+
+def heatmap(top_k):
+    agg_tabella = pd.read_csv(
+        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/agg_tabella.csv",
+        encoding="utf-8-sig",
+    )
+
+    best_characters = agg_tabella.head(top_k)["speaker_lower"].tolist()
+    tab_best = agg_tabella[
+        agg_tabella["speaker_lower"].isin(best_characters)
+    ].set_index("speaker_lower")
+    tab_best.head()
+    tab_best = tab_best[
+        ["bert_entropy_mean", "out_degree_mean", "in_degree_mean", "pagerank_mean"]
     ]
-    pre_sorted = filtered.sort_values(by="betweenness_mean", ascending=False)
-    sorted = pre_sorted.sort_values(by=f"{criterion}", ascending=False)
-    top_k_characters = sorted.head(top_k)
 
-    plots = []
+    tab_norm = (tab_best - tab_best.min()) / (tab_best.max() - tab_best.min())
+    annotations = tab_best.round(2).astype(str)
 
-    for character in top_k_characters["Character_Name"].tolist():
-        # Prendi tutti i dialoghi del personaggio su tutti i film
-        sub = dialogs[
-            dialogs["speaker"].str.lower().str.strip() == character.lower().strip()
-        ]
-
-        # Raggruppa per Film + Capitolo per mantenere ordine temporale globale
-        sub = sub.sort_values(["Movie ID", "Chapter ID"])
-        sub["film_chapter"] = (
-            sub["Movie ID"].astype(str) + "-" + sub["Chapter ID"].astype(str)
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=tab_norm.values,
+            x=tab_norm.columns,
+            y=tab_norm.index,
+            colorscale="RdBu",
+            reversescale=True,
+            colorbar=dict(title="Valore normalizzato"),
+            zmin=0,
+            zmax=1,
+            # text=tab_best.round(2).astype(str),
+            text=annotations.values,
+            texttemplate="%{text}",
+            hoverinfo="text+x+y",
         )
+    )
 
-        agg = (
-            sub.groupby(["Movie ID", "Chapter ID"])
-            .agg(
-                vader_compound_mean=("vader_compound", "mean"),
-                bert_sentiment_mean=("bert_sentiment", "mean"),
-                vader_count=("vader_compound", "size"),
-            )
-            .reset_index()
+    fig.update_layout(
+        title="Top Personaggi - Entropia, Out-degree, In-degree, Pagerank",
+        xaxis_title="Metrica",
+        yaxis_title="Personaggio",
+        yaxis=dict(autorange="reversed"),
+        margin=dict(l=100, r=20, t=50, b=50),
+        height=500,
+    )
+
+    return fig
+
+
+def heatmap_2(top_k):
+    agg_tabella = pd.read_csv(
+        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/agg_tabella.csv",
+        encoding="utf-8-sig",
+    )
+    dialogs = pd.read_csv(
+        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/dialogs_bert_sentiment.csv",
+        encoding="utf-8-sig",
+    )
+    best_characters = agg_tabella.head(top_k)["speaker_lower"].tolist()
+
+    def bert_entropy_for_group(df):
+        binned = pd.cut(
+            df["bert_sentiment"],
+            bins=[0.5, 2.5, 3.5, 5.5],
+            labels=["neg", "neu", "pos"],
         )
+        probs = binned.value_counts(normalize=True)
+        return entropy(probs)
 
-        # Crea una colonna unica che rappresenta film-capitolo
-        agg["film_chapter"] = (
-            agg["Movie ID"].astype(str) + "-" + agg["Chapter ID"].astype(str)
+    entropy_line = (
+        dialogs.copy()
+        .assign(speaker_lower=lambda d: d["speaker"].str.lower().str.strip())
+        .query("speaker_lower in @best_characters")
+        .groupby(["Movie ID", "speaker_lower"])
+        .apply(bert_entropy_for_group)
+        .reset_index(name="bert_entropy")
+    )
+    entropy_line = entropy_line.merge(
+        agg_tabella[["speaker_lower", "Character_Name"]], on="speaker_lower", how="left"
+    )
+    entropy_line["Movie ID"] = entropy_line["Movie ID"].astype(int)
+
+    # Pivot: riga = personaggio, colonna = film (ID 1-8 ordinati)
+    heatmap_df = entropy_line.pivot(
+        index="Character_Name", columns="Movie ID", values="bert_entropy"
+    )
+    heatmap_df = heatmap_df.reindex(columns=range(1, 9))
+
+    annotations = heatmap_df.round(2).astype(str)
+
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=heatmap_df.values,
+            x=heatmap_df.columns,
+            y=heatmap_df.index,
+            colorscale="YlGnBu",
+            colorbar=dict(title="Entropia BERT"),
+            text=annotations.values,
+            texttemplate="%{text}",
+            hovertemplate="<b>%{y}</b><br>Movie ID %{x}: %{text}<extra></extra>",
         )
+    )
 
-        # Line plot
-        fig1 = go.Figure()
+    fig.update_layout(
+        title="Heatmap entropia BERT (personaggi vs film)",
+        xaxis_title="Movie ID",
+        yaxis_title="Personaggio",
+        yaxis=dict(autorange="reversed"),  # per imitare Seaborn
+        margin=dict(l=100, r=20, t=50, b=50),
+        height=500,
+    )
 
-        fig1.add_trace(
-            go.Scatter(
-                x=agg["film_chapter"],
-                y=agg["vader_compound_mean"],
-                mode="lines+markers",
-                name="VADER Sentiment",
-                line=dict(color="goldenrod"),
-                marker=dict(symbol="circle"),
-            )
+    return fig
+
+
+def bert_entropy_plots(top_k):
+    agg_tabella = pd.read_csv(
+        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/agg_tabella.csv",
+        encoding="utf-8-sig",
+    )
+    dialogs = pd.read_csv(
+        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/dialogs_bert_sentiment.csv",
+        encoding="utf-8-sig",
+    )
+    best_characters = agg_tabella.head(top_k)["speaker_lower"].tolist()
+
+    def bert_entropy_for_group(df):
+        binned = pd.cut(
+            df["bert_sentiment"],
+            bins=[0.5, 2.5, 3.5, 5.5],
+            labels=["neg", "neu", "pos"],
         )
+        probs = binned.value_counts(normalize=True)
+        return entropy(probs)
 
-        fig1.add_trace(
-            go.Scatter(
-                x=agg["film_chapter"],
-                y=agg["bert_sentiment_mean"],
-                mode="lines+markers",
-                name="BERT Sentiment",
-                line=dict(color="mediumseagreen"),
-                marker=dict(symbol="circle"),
-            )
-        )
+    entropy_line = (
+        dialogs.copy()
+        .assign(speaker_lower=lambda d: d["speaker"].str.lower().str.strip())
+        .query("speaker_lower in @best_characters")
+        .groupby(["Movie ID", "speaker_lower"])
+        .apply(bert_entropy_for_group)
+        .reset_index(name="bert_entropy")
+    )
+    entropy_line = entropy_line.merge(
+        agg_tabella[["speaker_lower", "Character_Name"]], on="speaker_lower", how="left"
+    )
+    entropy_line["Movie ID"] = entropy_line["Movie ID"].astype(int)
 
-        fig1.update_layout(
-            title=f"Andamento emozionale di {character} su tutti i film",
-            xaxis_title="Film-Capitolo",
-            yaxis_title="Sentiment medio",
-            xaxis=dict(tickangle=-45),
-            legend=dict(x=0, y=1),
-            margin=dict(t=50, b=100),
-            height=500,
-        )
+    fig = px.line(
+        entropy_line.sort_values(["Movie ID"]),
+        x="Movie ID",
+        y="bert_entropy",
+        color="Character_Name",
+        markers=True,
+        title="Andamento entropia BERT per personaggio",
+        labels={
+            "Movie ID": "Movie ID",
+            "bert_entropy": "Entropia BERT",
+            "Character_Name": "Personaggio",
+        },
+    )
 
-        # Heatmap
-        pivot = agg.pivot_table(
-            index="film_chapter", values=["vader_compound_mean", "bert_sentiment_mean"]
-        ).T
+    fig.update_layout(
+        title="Andamento entropia BERT per personaggio",
+        xaxis_title="Movie ID",
+        yaxis_title="Entropia BERT",
+        xaxis=dict(range=[1, 8], dtick=1),
+        yaxis=dict(rangemode="tozero"),
+        legend_title_text="Personaggio",
+        height=500,
+        margin=dict(l=50, r=200),
+        legend=dict(x=1.02, y=1, bordercolor="Black", borderwidth=1),
+    )
 
-        # Convertiamo in long format per Plotly
-        pivot_long = pivot.reset_index().melt(
-            id_vars="index", var_name="film_chapter", value_name="sentiment"
-        )
-        pivot_long.rename(columns={"index": "model"}, inplace=True)
-
-        fig2 = px.imshow(
-            pivot.values,
-            labels=dict(x="Film-Capitolo", y="Modello", color="Sentiment"),
-            x=pivot.columns,
-            y=pivot.index,
-            color_continuous_scale="RdBu_r",
-            aspect="auto",
-        )
-
-        fig2.update_layout(
-            title=f"Heatmap emozionale - {character} (Film-Capitolo)",
-            xaxis_title="Film-Capitolo",
-            yaxis_title="",
-            height=250,
-            margin=dict(t=50, b=50),
-        )
-
-        plots.append((fig1, fig2))
-
-    return plots
+    return fig
 
 
 #################################################################################################
@@ -143,48 +262,6 @@ layout = html.Div(
                 html.Div(
                     [
                         html.Label(
-                            "Criterio di scelta:",
-                            style={"fontWeight": "bold", "marginBottom": "5px"},
-                        ),
-                        dcc.Dropdown(
-                            id="criterio-dropdown",
-                            options=[
-                                {
-                                    "label": "Vader entropy mean",
-                                    "value": "vader_entropy_mean",
-                                },
-                                {
-                                    "label": "Bert entropy mean",
-                                    "value": "bert_entropy_mean",
-                                },
-                            ],
-                            value="vader_entropy_mean",
-                            clearable=False,
-                            style={"width": "250px"},
-                        ),
-                    ],
-                    style={"marginRight": "40px"},
-                ),
-                html.Div(
-                    [
-                        html.Label(
-                            "Min. numero di film per personaggio:",
-                            style={"fontWeight": "bold", "marginBottom": "5px"},
-                        ),
-                        dcc.Input(
-                            id="threshold-movies",
-                            type="number",
-                            min=1,
-                            max=8,
-                            step=1,
-                            value=5,
-                            style={"width": "100px"},
-                        ),
-                    ]
-                ),
-                html.Div(
-                    [
-                        html.Label(
                             "Top risultati:",
                             style={"fontWeight": "bold", "marginBottom": "5px"},
                         ),
@@ -194,6 +271,7 @@ layout = html.Div(
                             min=1,
                             step=1,
                             value=5,
+                            max=17,
                             style={"width": "100px"},
                         ),
                     ]
@@ -204,15 +282,36 @@ layout = html.Div(
                 "alignItems": "flex-end",
                 "marginTop": "20px",
                 "marginBottom": "20px",
-                "gap": "30px",  # per armonizzare meglio la distanza
+                "gap": "30px",
                 "flexWrap": "wrap",
             },
         ),
         html.Div(
-            id="grafici-container",
+            dcc.Graph(id="grafici-container"),
             style={
-                "margin": "0 auto",  # centra il contenitore orizzontalmente
-                "padding": "20px",  # spazio interno per respiro visivo
+                "margin": "0 auto",
+                "padding": "20px",
+            },
+        ),
+        html.Div(
+            dcc.Graph(id="heatmap"),
+            style={
+                "margin": "0 auto",
+                "padding": "20px",
+            },
+        ),
+        html.Div(
+            dcc.Graph(id="heatmap-2"),
+            style={
+                "margin": "0 auto",
+                "padding": "20px",
+            },
+        ),
+        html.Div(
+            dcc.Graph(id="bert-entropy-plots"),
+            style={
+                "margin": "0 auto",
+                "padding": "20px",
             },
         ),
         html.Div(
@@ -233,23 +332,51 @@ layout = html.Div(
 
 
 @callback(
-    Output("grafici-container", "children"),
+    Output("grafici-container", "figure"),
     [
-        Input("criterio-dropdown", "value"),
-        Input("threshold-movies", "value"),
         Input("top-k-results", "value"),
     ],
 )
-def update_graph(criterion, number_films, top_k):
-    plots = plot(criterion, number_films, top_k)
-    children = []
-    for idx, (fig, fig_heat) in enumerate(plots):
-        children.append(html.H4(f"Risultato {idx + 1}"))
-        children.append(dcc.Graph(figure=fig))
-        children.append(dcc.Graph(figure=fig_heat))
-        children.append(html.Hr())
+def update_graph(top_k):
+    fig = plot(top_k)
 
-    return children
+    return fig
+
+
+@callback(
+    Output("heatmap", "figure"),
+    [
+        Input("top-k-results", "value"),
+    ],
+)
+def update_heatmap(top_k):
+    fig = heatmap(top_k)
+
+    return fig
+
+
+@callback(
+    Output("heatmap-2", "figure"),
+    [
+        Input("top-k-results", "value"),
+    ],
+)
+def update_heatmap_2(top_k):
+    fig = heatmap_2(top_k)
+
+    return fig
+
+
+@callback(
+    Output("bert-entropy-plots", "figure"),
+    [
+        Input("top-k-results", "value"),
+    ],
+)
+def update_bert_entropy_plots(top_k):
+    fig = bert_entropy_plots(top_k)
+
+    return fig
 
 
 @callback(
