@@ -13,11 +13,11 @@ dash.register_page(__name__)
 
 def plot(criterion, number_films, top_k):
     emotional_characters = pd.read_csv(
-        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/emotional_characters.csv",
+        "outputs/emotional_characters.csv",
         encoding="utf-8-sig",
     )
     dialogs = pd.read_csv(
-        "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/outputs/dialogs_bert_vader.csv"
+        "outputs/dialogs_bert_vader.csv"
     )
 
     filtered = emotional_characters[
@@ -130,7 +130,7 @@ def plot(criterion, number_films, top_k):
 layout = html.Div(
     [
         html.H1("Parte 1"),
-        html.H2("Evoluzione intensità emotiva dei personaggi secondari"),
+        html.H2("Individuazione e studio dei personaggi secondari"),
         html.P(
             "Ora osserviamo come cambia l'intensità emotiva rilevata con due strumenti distinti: Vader e Bert. Grazie a questi due "
             "strumenti linguistici possiamo capire l'intensità di una frase di un personaggio e calcolarne l'entropia, sotto rappresentata. "

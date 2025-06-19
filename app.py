@@ -1,4 +1,3 @@
-from readline import redisplay
 import dash
 from dash import dcc
 from dash import html

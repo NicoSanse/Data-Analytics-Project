@@ -33,15 +33,10 @@ layout = html.Div(
                     },
                 ),
                 html.P(
-                    'Data l\'eccezionale popolarità del prodotto cinematografico "Harry Potter" nel corso del tempo '
-                    "sono non pochi i contenuti che sono nati a partire da tale marchio, si vedano videogiochi, gadget, "
-                    "blog ecc ... \n"
-                    "Tuttavia a livello cinematografico non si è mai andati oltre ai noti 8 film della saga, mentre un esempio opposto "
-                    'di come sfruttare la popolarità dei prodotti è offerto dal "Marvel Cinematic Universe", il quale ha invece '
-                    "creato con successo un'infinita serie di franchise. \n \n"
-                    'Questo progetto si pone come obiettivo quello di studiare la saga di "Harry Potter" con strumenti analitici '
-                    "per ottenere informazioni rivendibili utili alla creazione di prodotti commerciali appartenenti all'universo fantastico "
-                    "della nota scrittrice J. K. Rowling. In sintesi gli obiettivi sono: ",
+                    'Nel settore dell’intrattenimento, la capacità di analizzare scientificamente le dinamiche emotive di personaggi e storie è la chiave per il successo di ogni franchise. \n' 
+                    'Questa dashboard nasce per esplorare la saga di Harry Potter con un approccio data-driven: analizziamo emozioni, dialoghi e relazioni nei film per fornire strumenti concreti a chi crea, promuove e valorizza prodotti narrativi, '
+                    'con l’obiettivo di scoprire nuove storie da raccontare, personalizzare il marketing e ispirare la prossima generazione di successi fantasy. \n' 
+                    'Lo studio si articola in 4 fasi:' ,
                     style={
                         "marginTop": "30px",
                         "fontSize": "1.1em",
@@ -51,15 +46,15 @@ layout = html.Div(
                 html.Ul(
                     [
                         html.Li(
-                            "Identificazione di personaggi non centrali, ma ad alta carica emotiva per possibili spin-off"
+                            "Identificazione di personaggi non centrali, ma ad alta carica emotiva per lo sviluppo di possibili spin-off."
                         ),
                         html.Li(
-                            "Studio dell'evoluzione dell'emozione dei personaggi più importanti per riproducibilità"
+                            "Studio dell'evoluzione dell'emozione dei personaggi più importanti per trovare archetipi emotivi trasferibili ad altri franchise."
                         ),
                         html.Li(
-                            "Ricerca di correlazione tra emozione rilevata e casata a fine di marketing"
+                            "Ricerca di correlazione tra emozione rilevata e Casa a fine di marketing."
                         ),
-                        html.Li("Raccomandatore scene per appassionati"),
+                        html.Li("Sviluppo di un raccomandatore di scene per emozione per suggerire automaticamente le scene di maggior impatto emotivo, utili sia in contesti di fruizione che di promozione."),
                     ],
                     style={"marginTop": "20px", "fontSize": "1.05em"},
                 ),

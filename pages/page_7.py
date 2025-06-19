@@ -15,7 +15,7 @@ dash.register_page(__name__)
 
 layout = html.Div(
     [
-        html.H1("Parte 4"),
+        html.H1("Limitazioni"),
         html.Div(
             [
                 html.Button("← Pagina precedente", id="prev-page", n_clicks=0),
@@ -34,7 +34,7 @@ layout = html.Div(
 
 
 @callback(
-    Output("from-page-7-to-page-end-url", "pathname"),
+    Output("from-page-7-to-page-6-url", "pathname"),
     Input("next-page", "n_clicks"),
     prevent_initial_call=True,
     allow_duplicate=True,
@@ -45,7 +45,7 @@ def go_to_next_page(n_clicks):
 
 
 @callback(
-    Output("from-page-7-to-page-6-url", "pathname"),
+    Output("from-page-7-to-page-end-url", "pathname"),
     Input("prev-page", "n_clicks"),
     prevent_initial_call=True,
     allow_duplicate=True,

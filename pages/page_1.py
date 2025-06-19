@@ -1,4 +1,3 @@
-from readline import redisplay
 import dash
 from dash import dcc
 from dash import html
@@ -20,19 +19,19 @@ dash.register_page(__name__)
 ###############################################################################################
 
 characters = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Characters.csv",
+    "Harry_Potter_Movies/Characters.csv",
     encoding="latin-1",
 )
 movies = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Movies.csv",
+    "Harry_Potter_Movies/Movies.csv",
     encoding="utf-8-sig",
 )
 dialogues = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Dialogue.csv",
+    "Harry_Potter_Movies/Dialogue.csv",
     encoding="latin-1",
 )
 chapters = pd.read_csv(
-    "/Users/nicosanse/Desktop/Uni/1' sem/Lab/Data Analytics/Data Analytics Project/Harry_Potter_Movies/Chapters.csv",
+    "Harry_Potter_Movies/Chapters.csv",
     encoding="latin-1",
 )
 
@@ -124,7 +123,7 @@ for mid, g in dialogs.groupby("Movie ID"):
 layout = html.Div(
     [
         html.H1("Introduzione"),
-        html.H2("Analisi su grafo dell'interazione dei personaggi"),
+        html.H2("Analisi sul grafo dell'interazione dei personaggi"),
         html.P(
             "Iniziamo con una visione di insieme sul dataset. Riportiamo il grafo rappresentante l'interazione tra personaggi "
             "e la loro intensità. Tanto più un nodo è importante, secondo Pagerank, tanto più sarà in primo piano, mentre è possibile "
