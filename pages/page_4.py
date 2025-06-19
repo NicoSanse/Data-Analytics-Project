@@ -15,7 +15,7 @@ dash.register_page(__name__)
 
 layout = html.Div(
     [
-        html.H1("Parte 2"),
+        html.H1("Parte 2.2"),
         html.Div(
             [
                 html.Button("← Pagina precedente", id="prev-page", n_clicks=0),

@@ -211,8 +211,8 @@ layout = html.Div(
         html.Div(
             id="grafici-container",
             style={
-                "margin": "0 auto",  # centra il contenitore orizzontalmente
-                "padding": "20px",  # spazio interno per respiro visivo
+                "margin": "0 auto",
+                "padding": "20px",
             },
         ),
         html.Div(

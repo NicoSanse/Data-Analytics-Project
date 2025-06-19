@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 dash.register_page(__name__)
 
 
-# Data Analytics Project/outputs/full_saga_with_emotions.csv
 def plot_bar(measure):
     full_saga_df = pd.read_csv(
         "outputs/full_saga_with_emotions.csv",
