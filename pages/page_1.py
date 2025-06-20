@@ -22,27 +22,15 @@ dash.register_page(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-file_path = os.path.join(BASE_DIR, "Harry_Potter_Movies", "Characters.csv")
+file_path_characters = os.path.join(BASE_DIR, "Harry_Potter_Movies", "Characters.csv")
+file_path_movies = os.path.join(BASE_DIR, "Harry_Potter_Movies", "Movies.csv")
+file_path_dialogues = os.path.join(BASE_DIR, "Harry_Potter_Movies", "Dialogue.csv")
+file_path_chapters = os.path.join(BASE_DIR, "Harry_Potter_Movies", "Chapters.csv")
 
-characters = pd.read_csv(file_path, encoding="latin-1")
-
-
-characters = pd.read_csv(
-    "Harry_Potter_Movies/Characters.csv",
-    encoding="latin-1",
-)
-movies = pd.read_csv(
-    "Harry_Potter_Movies/Movies.csv",
-    encoding="utf-8-sig",
-)
-dialogues = pd.read_csv(
-    "Harry_Potter_Movies/Dialogue.csv",
-    encoding="latin-1",
-)
-chapters = pd.read_csv(
-    "Harry_Potter_Movies/Chapters.csv",
-    encoding="latin-1",
-)
+characters = pd.read_csv(file_path_characters, encoding="latin-1")
+movies = pd.read_csv(file_path_movies, encoding="latin-1")
+dialogues = pd.read_csv(file_path_dialogues, encoding="latin-1")
+chapters = pd.read_csv(file_path_chapters, encoding="latin-1")
 
 
 ###############################################################################################

@@ -7,21 +7,28 @@ import plotly.graph_objects as go
 import pandas as pd
 import matplotlib.pyplot as plt
 import networkx as nx
-
+import os
 
 dash.register_page(__name__)
 
 
-def create_line_plot(top_n, film_id, emotions):
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    df_emotions = pd.read_csv(
-        "outputs/df_emotions.csv",
-        encoding="utf-8-sig",
-    )
-    dialogs = pd.read_csv(
-        "outputs/dialogs_bert_sentiment.csv",
-        encoding="utf-8-sig",
-    )
+file_path_tabella = os.path.join(BASE_DIR, "outputs", "df_emotions.csv")
+file_path_dialogs = os.path.join(BASE_DIR, "outputs", "dialogs_bert_sentiment.csv")
+
+
+df_emotions = pd.read_csv(
+    file_path_tabella,
+    encoding="utf-8-sig",
+)
+dialogs = pd.read_csv(
+    file_path_dialogs,
+    encoding="utf-8-sig",
+)
+
+
+def create_line_plot(top_n, film_id, emotions):
 
     centrality_list = []
     for movie_id, group in dialogs.groupby("Movie ID"):
@@ -125,56 +132,60 @@ layout = html.Div(
             style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em" , "textAlign": "justify", "whiteSpace": "pre-line",},
         ),
         html.Div(
-            html.Div(
-                children=[
-                    html.Label(
-                        "Emozioni selezionabili:",
-                        style={"fontWeight": "bold", "marginBottom": "5px"},
-                    ),
-                    dcc.Dropdown(
-                        id="emotion-multiselect",
-                        options=[
-                            {"label": "joy", "value": "joy"},
-                            {"label": "anger", "value": "anger"},
-                            {"label": "fear", "value": "fear"},
-                            {"label": "sadness", "value": "sadness"},
-                            {"label": "love", "value": "love"},
-                            {"label": "surprise", "value": "surprise"},
-                        ],
-                        value=["joy", "anger", "fear"],
-                        multi=True,
-                        clearable=False,
-                        placeholder="Seleziona le emozioni da visualizzare",
-                        style={"width": "50%"},
-                    ),
-                    html.Label(
-                        "Top risultati:",
-                        style={"fontWeight": "bold", "marginBottom": "5px"},
-                    ),
-                    dcc.Input(
-                        id="top-n",
-                        type="number",
-                        min=1,
-                        step=1,
-                        value=3,
-                        style={"width": "100px"},
-                    ),
-                    html.Label(
-                        "Movie ID:",
-                        style={"fontWeight": "bold", "marginBottom": "5px"},
-                    ),
-                    dcc.Input(
-                        id="movie-id",
-                        type="number",
-                        min=1,
-                        max=8,
-                        step=1,
-                        value=1,
-                        style={"width": "100px"},
-                    ),
-                ],
-                style={"display": "flex", "gap": "20px"},
-            )
+            children=[
+                html.Div(
+                    children=[
+                        html.Label(
+                            "Emozioni selezionabili:",
+                            style={"fontWeight": "bold", "marginBottom": "5px"},
+                        ),
+                        dcc.Dropdown(
+                            id="emotion-multiselect",
+                            options=[
+                                {"label": "joy", "value": "joy"},
+                                {"label": "anger", "value": "anger"},
+                                {"label": "fear", "value": "fear"},
+                                {"label": "sadness", "value": "sadness"},
+                                {"label": "love", "value": "love"},
+                                {"label": "surprise", "value": "surprise"},
+                            ],
+                            value=["joy", "anger", "fear"],
+                            multi=True,
+                            clearable=False,
+                            placeholder="Seleziona le emozioni da visualizzare",
+                            style={"width": "50%"},
+                        ),
+                        html.Label(
+                            "Top risultati:",
+                            style={"fontWeight": "bold", "marginBottom": "5px"},
+                        ),
+                        dcc.Input(
+                            id="top-n",
+                            type="number",
+                            min=1,
+                            step=1,
+                            value=3,
+                            style={"width": "100px"},
+                        ),
+                    ],
+                    style={"display": "flex", "gap": "20px"},
+                ),
+                html.Div(
+                    children=[
+                        html.Label(
+                            "Movie ID:",
+                            style={"fontWeight": "bold", "marginBottom": "5px"},
+                        ),
+                        dcc.Slider(
+                            id="movie-id",
+                            min=1,
+                            max=8,
+                            value=1,
+                            step=1,
+                        ),
+                    ]
+                ),
+            ]
         ),
         html.Div(
             id="plots-container",

@@ -6,16 +6,30 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import os
 
 dash.register_page(__name__)
 
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+file_path_full_saga_df = os.path.join(
+    BASE_DIR, "outputs", "full_saga_with_emotions.csv"
+)
+file_path_nrc_emotion = os.path.join(BASE_DIR, "outputs", "nrc_emotions.csv")
+
+
+full_saga_df = pd.read_csv(
+    file_path_full_saga_df,
+    encoding="utf-8-sig",
+)
+nrc_emotions = pd.read_csv(
+    file_path_nrc_emotion,
+    encoding="utf-8-sig",
+)
+
+
 def plot_bar(measure):
-    full_saga_df = pd.read_csv(
-        "outputs/full_saga_with_emotions.csv",
-        encoding="utf-8-sig",
-    )
     house_emotion_sums = full_saga_df.groupby("House").sum()
     house_emotion_sums = house_emotion_sums[
         ["sadness", "joy", "love", "anger", "fear", "surprise"]
@@ -44,10 +58,6 @@ def plot_bar(measure):
         "trust": "#228B22",
     }
 
-    nrc_emotions = pd.read_csv(
-        "outputs/nrc_emotions.csv",
-        encoding="utf-8-sig",
-    )
     nrc_emotions_sum = nrc_emotions.groupby("House").sum()
     nrc_emotions_sum = nrc_emotions_sum[
         ["anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust"]

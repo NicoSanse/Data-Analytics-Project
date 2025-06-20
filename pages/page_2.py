@@ -15,19 +15,21 @@ dash.register_page(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-file_path = os.path.join(BASE_DIR, "Harry_Potter_Movies", "Characters.csv")
+file_path_tabella = os.path.join(BASE_DIR, "outputs", "agg_tabella.csv")
+file_path_dialogs = os.path.join(BASE_DIR, "outputs", "dialogs_bert_sentiment.csv")
+
+
+agg_tabella = pd.read_csv(
+    file_path_tabella,
+    encoding="utf-8-sig",
+)
+dialogs = pd.read_csv(
+    file_path_dialogs,
+    encoding="utf-8-sig",
+)
 
 
 def plot(top_k):
-
-    agg_tabella = pd.read_csv(
-        "outputs/agg_tabella.csv",
-        encoding="utf-8-sig",
-    )
-    dialogs = pd.read_csv(
-        "outputs/dialogs_bert_sentiment.csv",
-        encoding="utf-8-sig",
-    )
     best_characters = agg_tabella.head(top_k)["speaker_lower"].tolist()
 
     def bert_entropy_for_group(df):
@@ -75,10 +77,6 @@ def plot(top_k):
 
 
 def heatmap(top_k):
-    agg_tabella = pd.read_csv(
-        "outputs/agg_tabella.csv",
-        encoding="utf-8-sig",
-    )
 
     best_characters = agg_tabella.head(top_k)["speaker_lower"].tolist()
     tab_best = agg_tabella[
@@ -122,14 +120,6 @@ def heatmap(top_k):
 
 
 def heatmap_2(top_k):
-    agg_tabella = pd.read_csv(
-        "outputs/agg_tabella.csv",
-        encoding="utf-8-sig",
-    )
-    dialogs = pd.read_csv(
-        "outputs/dialogs_bert_sentiment.csv",
-        encoding="utf-8-sig",
-    )
     best_characters = agg_tabella.head(top_k)["speaker_lower"].tolist()
 
     def bert_entropy_for_group(df):
