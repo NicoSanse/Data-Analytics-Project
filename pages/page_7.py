@@ -15,21 +15,36 @@ dash.register_page(__name__)
 
 layout = html.Div(
     [
-                html.H2("Limitazioni"),
+        html.H2("Limitazioni"),
         html.Ul(
             [
-                html.Li("I grafi di interazione considerano solo i dialoghi diretti tra personaggi, escludendo relazioni indirette o menzioni."),
-                html.Li("L’analisi delle emozioni si basa su lessici generici non adattati al vocabolario specifico di Harry Potter (nomi, incantesimi, espressioni particolari)."),
-                html.Li("Assenza di lexicon emotivi specifici per il mondo della saga: parole cariche di significato emotivo possono non essere riconosciute."),
-                html.Li("Impossibilità di analizzare elementi paralinguistici (intonazione, tono di voce, espressioni) che contribuiscono all’emozione trasmessa nei film."),
-                html.Li("Il modello non coglie il contesto visivo, gestuale e registico, fondamentale per alcune scene chiave."),
+                html.Li(
+                    "I grafi di interazione considerano solo i dialoghi diretti tra personaggi, escludendo relazioni indirette o menzioni."
+                ),
+                html.Li(
+                    "L’analisi delle emozioni si basa su lessici generici non adattati al vocabolario specifico di Harry Potter (nomi, incantesimi, espressioni particolari)."
+                ),
+                html.Li(
+                    "Assenza di lexicon emotivi specifici per il mondo della saga: parole cariche di significato emotivo possono non essere riconosciute."
+                ),
+                html.Li(
+                    "Impossibilità di analizzare elementi paralinguistici (intonazione, tono di voce, espressioni) che contribuiscono all’emozione trasmessa nei film."
+                ),
+                html.Li(
+                    "Il modello non coglie il contesto visivo, gestuale e registico, fondamentale per alcune scene chiave."
+                ),
             ],
             style={"fontSize": "1.1em", "marginTop": "20px", "textAlign": "justify"},
         ),
         html.P(
             "Questi limiti suggeriscono sviluppi futuri come la creazione di lessici emotivi personalizzati per Harry Potter, "
             "l’integrazione di segnali non testuali e l’analisi di relazioni indirette o complesse tra personaggi.",
-            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em", "textAlign": "justify"},
+            style={
+                "marginTop": "30px",
+                "fontSize": "1.1em",
+                "lineHeight": "1.6em",
+                "textAlign": "justify",
+            },
         ),
         html.Div(
             [

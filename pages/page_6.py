@@ -56,4 +56,4 @@ def go_to_next_page(n_clicks):
     allow_duplicate=True,
 )
 def go_to_previous_page(n_clicks):
-    return "/page-6"
+    return "/page-5"

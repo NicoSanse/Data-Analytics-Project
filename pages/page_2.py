@@ -8,6 +8,7 @@ import plotly.express as px
 import pandas as pd
 from scipy.stats import entropy
 import os
+import numpy as np
 
 
 dash.register_page(__name__)
@@ -39,7 +40,9 @@ def plot(top_k):
             labels=["neg", "neu", "pos"],
         )
         probs = binned.value_counts(normalize=True)
-        return entropy(probs)
+        ent = entropy(probs)
+        max_ent = np.log(3)
+        return ent / max_ent if max_ent > 0 else 0
 
     entropy_line = (
         dialogs.copy()
@@ -129,7 +132,9 @@ def heatmap_2(top_k):
             labels=["neg", "neu", "pos"],
         )
         probs = binned.value_counts(normalize=True)
-        return entropy(probs)
+        ent = entropy(probs)
+        max_ent = np.log(3)
+        return ent / max_ent if max_ent > 0 else 0
 
     entropy_line = (
         dialogs.copy()
@@ -142,6 +147,7 @@ def heatmap_2(top_k):
     entropy_line = entropy_line.merge(
         agg_tabella[["speaker_lower", "Character_Name"]], on="speaker_lower", how="left"
     )
+
     entropy_line["Movie ID"] = entropy_line["Movie ID"].astype(int)
 
     # Pivot: riga = personaggio, colonna = film (ID 1-8 ordinati)
