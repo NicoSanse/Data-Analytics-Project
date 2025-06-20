@@ -117,6 +117,13 @@ def create_line_plot(top_n, film_id, emotions):
 layout = html.Div(
     [
         html.H1("Parte 2"),
+        html.H2("Analisi dei personaggi centrali"),
+        html.P(
+            "Analizzare i pattern emotivi dei protagonisti nelle storie di successo è fondamentale per ideare nuove trame coinvolgenti. In questo studio, ci siamo focalizzati sui personaggi principali della saga di Harry Potter,"
+            "esaminando l’evoluzione delle loro emozioni nei film per individuare archetipi emotivi trasferibili ad altri franchise. \n"
+            "La selezione dei protagonisti è stata basata sulla loro centralità narrativa, misurata tramite il valore medio di Pagerank nei grafi delle interazioni. Vengono così identificati i personaggi più influenti e connessi all’interno della storia.\n" ,
+            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em" , "textAlign": "justify", "whiteSpace": "pre-line",},
+        ),
         html.Div(
             html.Div(
                 children=[

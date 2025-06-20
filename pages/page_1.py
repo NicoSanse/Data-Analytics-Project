@@ -1,4 +1,3 @@
-from readline import redisplay
 import dash
 from dash import dcc
 from dash import html
@@ -135,10 +134,11 @@ layout = html.Div(
         html.H1("Introduzione"),
         html.H2("Analisi su grafo dell'interazione dei personaggi"),
         html.P(
-            "Iniziamo con una visione di insieme sul dataset. Riportiamo il grafo rappresentante l'interazione tra personaggi "
-            "e la loro intensità. Tanto più un nodo è importante, secondo Pagerank, tanto più sarà in primo piano, mentre è possibile "
-            "regolare il peso degli archi per filtrare i risultati.",
-            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em"},
+            "Per questo studio è stato utilizzato il dataset “Harry Potter Movies Dataset”, che fornisce una panoramica dettagliata dei principali elementi narrativi della saga cinematografica. Il dataset include dati strutturati su personaggi, dialoghi, capitoli e film. \n" 
+            "A partire dall’analisi dei dialoghi, è stato possibile ricostruire le reti di interazione tra i personaggi, rappresentando ogni film come un grafo orientato e pesato: i nodi corrispondono ai personaggi, mentre gli archi rappresentano la frequenza e la direzione dei loro scambi verbali. \n"
+            "Nella visualizzazione dei grafi, la dimensione e il colore dei nodi riflettono l’importanza dei personaggi (misurata tramite Pagerank), mentre lo spessore e la trasparenza degli archi indicano la forza dell'interazione tra i personaggi. \n" \
+             "È possibile regolare il peso degli archi per filtrare i risultati.",
+            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em", "textAlign": "justify", "whiteSpace": "pre-line",},
         ),
         html.Div(
             [

@@ -172,9 +172,15 @@ layout = html.Div(
         html.H1("Parte 3"),
         html.H2("Emozioni dominanti delle Case di appartenenza"),
         html.P(
+            "L’analisi delle emozioni espresse dai personaggi nei dialoghi permette di definire per ciascuna Casa di Hogwarts un profilo emotivo distintivo, offrendo nuove prospettive rispetto alle rappresentazioni tradizionali.\n"
+            "Questi risultati, oltre ad arricchire l’interpretazione letteraria, potrebbero essere utilizzati anche in ambito marketing per creare prodotti e campagne personalizzate che trasmettano l’essenza emotiva di ogni Casa, rafforzando il legame dei fan con il mondo di Harry Potter.\n"
+            "Per stimare lo stile emozionale di ciascuna Casa, le emozioni sono state quantificate e aggregate in base alla Casa di appartenenza dei personaggi, utilizzando strumenti specifici di sentiment analysis.\n" ,
+            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em" , "textAlign": "justify", "whiteSpace": "pre-line",},
+        ),
+        html.P(
             "In questa parte intendiamo fare un'analisi sullo stile emotivo dei personaggi usando la casata di "
-            "appartenenza come criterio di suddivisione. Sono stati usati due approcci: uno basato su transformers, "
-            "in particolare Roberta e l'altro basato su lexicon.",
+            "appartenenza come criterio di suddivisione. Sono stati usati due approcci: uno basato su transformers "
+            " e l'altro basato su lexicon.",
             style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em"},
         ),
         html.Div(
@@ -248,7 +254,7 @@ def update_plot(measure):
 )
 def go_to_next_page(n_clicks):
     # se la presentazione è finita, mettere /end
-    return "/page-7"
+    return "/page-6"
 
 
 @callback(

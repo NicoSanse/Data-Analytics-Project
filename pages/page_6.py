@@ -16,6 +16,11 @@ dash.register_page(__name__)
 layout = html.Div(
     [
         html.H1("Parte 4"),
+        html.H2("Raccomandatore di scene per emozione"),
+        html.P(
+            "Individuare automaticamente le scene a più alto impatto emotivo permette di suggerire agli utenti i momenti più intensi della saga, adattando l’esperienza di visione alle preferenze emozionali e facilitando la selezione di contenuti per scopi promozionali e di comunicazione.",
+            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em", "textAlign": "justify", "whiteSpace": "pre-line",},
+        ),
         html.Div(
             [
                 html.Button("← Pagina precedente", id="prev-page", n_clicks=0),
@@ -41,7 +46,7 @@ layout = html.Div(
 )
 def go_to_next_page(n_clicks):
     # se la presentazione è finita, mettere /end
-    return "/end"
+    return "/page-7"
 
 
 @callback(

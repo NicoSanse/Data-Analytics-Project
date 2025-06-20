@@ -195,11 +195,17 @@ layout = html.Div(
         html.H1("Parte 1"),
         html.H2("Individuazione e studio dei personaggi secondari"),
         html.P(
-            "Ora osserviamo come cambia l'intensità emotiva rilevata con due strumenti distinti: Vader e Bert. Grazie a questi due "
-            "strumenti linguistici possiamo capire l'intensità di una frase di un personaggio e calcolarne l'entropia, sotto rappresentata. "
-            "I risultati sono sempre ordinati dalla betweeness maggiore alla minore. È inoltre "
-            "possibile scegliere lo strumento usato per tale calcolo.",
-            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em"},
+            "Uno degli obiettivi principali di questo studio è individuare quei personaggi che, pur non occupando un ruolo centrale nella narrazione dei film di Harry Potter, si distinguono per una forte intensità emotiva nelle scene in cui compaiono. \n" 
+            "Questi soggetti possono essere il punto di partenza per la creazione di prequel, spin-off, prodotti derivati e nuove linee di merchandising. \n" ,
+            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em" , "textAlign": "justify", "whiteSpace": "pre-line",},
+        ),
+        html.P(
+            "Per identificare i personaggi secondari ma emotivamente rilevanti, sono stati applicati tre criteri principali:"
+            "\n- Non centrali: valore di Pagerank inferiore o uguale alla media;"
+            "\n- Sociali: out-degree almeno pari alla media;"
+            "\n- Emotivamente intensi: entropia emotiva superiore alla media."
+            "\nQuesti personaggi, pur non essendo protagonisti, si distinguono per ricchezza emotiva e frequenza nei dialoghi.",
+            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em", "whiteSpace": "pre-line"},
         ),
         html.Div(
             [
