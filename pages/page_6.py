@@ -56,7 +56,7 @@ layout = html.Div(
             style={"marginTop": "30px", "display": "flex", "gap": "10px"},
         ),
     ],
-    style={"padding": "10px"},
+    style={"padding": "20px"},
 )
 
 

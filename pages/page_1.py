@@ -134,7 +134,6 @@ layout = html.Div(
                 "whiteSpace": "pre-line",
             },
         ),
-        html.Hr(),
         html.Div(
             style={"margin": "20px", "display": "flex", "gap": "40px"},
             children=[

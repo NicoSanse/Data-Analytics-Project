@@ -246,7 +246,7 @@ layout = html.Div(
         ),
         # dcc.Location(id="page-3-url"),
     ],
-    style={"padding": "10px"},
+    style={"padding": "20px"},
 )
 
 

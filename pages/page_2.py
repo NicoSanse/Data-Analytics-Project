@@ -214,7 +214,6 @@ layout = html.Div(
                 "whiteSpace": "pre-line",
             },
         ),
-        html.Hr(),
         html.Div(
             [
                 html.Div(
