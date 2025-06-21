@@ -122,37 +122,56 @@ layout = html.Div(
         html.H1("Introduzione"),
         html.H2("Analisi su grafo dell'interazione dei personaggi"),
         html.P(
-            "Per questo studio è stato utilizzato il dataset “Harry Potter Movies Dataset”, che fornisce una panoramica dettagliata dei principali elementi narrativi della saga cinematografica. Il dataset include dati strutturati su personaggi, dialoghi, capitoli e film. \n" 
+            "Per questo studio è stato utilizzato il dataset “Harry Potter Movies Dataset”, che fornisce una panoramica dettagliata dei principali elementi narrativi della saga cinematografica. Il dataset include dati strutturati su personaggi, dialoghi, capitoli e film. \n"
             "A partire dall’analisi dei dialoghi, è stato possibile ricostruire le reti di interazione tra i personaggi, rappresentando ogni film come un grafo orientato e pesato: i nodi corrispondono ai personaggi, mentre gli archi rappresentano la frequenza e la direzione dei loro scambi verbali. \n"
-            "Nella visualizzazione dei grafi, la dimensione e il colore dei nodi riflettono l’importanza dei personaggi (misurata tramite Pagerank), mentre lo spessore e la trasparenza degli archi indicano la forza dell'interazione tra i personaggi. \n" \
-             "È possibile regolare il peso degli archi per filtrare i risultati.",
-            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em", "textAlign": "justify", "whiteSpace": "pre-line",},
+            "Nella visualizzazione dei grafi, la dimensione e il colore dei nodi riflettono l’importanza dei personaggi (misurata tramite Pagerank), mentre lo spessore e la trasparenza degli archi indicano la forza dell'interazione tra i personaggi. \n"
+            "È possibile regolare il peso degli archi per filtrare i risultati.",
+            style={
+                "marginTop": "30px",
+                "fontSize": "1.1em",
+                "lineHeight": "1.6em",
+                "textAlign": "justify",
+                "whiteSpace": "pre-line",
+            },
         ),
+        html.Hr(),
         html.Div(
-            [
-                html.Label("Tipo di visualizzazione:"),
-                dcc.RadioItems(
-                    id="view-type",
-                    options=[
-                        {"label": "Grafo", "value": "graph"},
-                        {"label": "Heatmap", "value": "heatmap"},
+            style={"margin": "20px", "display": "flex", "gap": "40px"},
+            children=[
+                html.Div(
+                    style={"display": "flex", "flexDirection": "column"},
+                    children=[
+                        html.Label("Tipo di visualizzazione:"),
+                        dcc.RadioItems(
+                            id="view-type",
+                            options=[
+                                {"label": "Grafo", "value": "graph"},
+                                {"label": "Heatmap", "value": "heatmap"},
+                            ],
+                            value="graph",
+                            labelStyle={
+                                "display": "inline-block",
+                                "marginRight": "20px",
+                            },
+                        ),
                     ],
-                    value="graph",
-                    labelStyle={"display": "inline-block", "margin-right": "20px"},
                 ),
-                html.Br(),
-                html.Label("Valore soglia (0-1):"),
-                dcc.Input(
-                    id="threshold-input",
-                    type="number",
-                    min=0,
-                    max=1,
-                    step=0.05,
-                    value=0.15,
-                    style={"width": "100px", "margin-left": "10px"},
+                html.Div(
+                    style={"display": "flex", "flexDirection": "column"},
+                    children=[
+                        html.Label("Valore soglia (0.00-1.00):"),
+                        dcc.Input(
+                            id="threshold-input",
+                            type="number",
+                            min=0,
+                            max=1,
+                            step=0.05,
+                            value=0.15,
+                            style={"width": "120px"},
+                        ),
+                    ],
                 ),
             ],
-            style={"margin": "20px"},
         ),
         html.Div(
             [
@@ -179,7 +198,7 @@ layout = html.Div(
         html.Button("Prossima pagina →", id="next-page", n_clicks=0),
         dcc.Location(id="from-page-1-to-page-2-url"),
     ],
-    style={"padding": "10px"},
+    style={"padding": "20px"},
 )
 
 

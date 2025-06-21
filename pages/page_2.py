@@ -191,9 +191,15 @@ layout = html.Div(
         html.H1("Parte 1"),
         html.H2("Individuazione e studio dei personaggi secondari"),
         html.P(
-            "Uno degli obiettivi principali di questo studio è individuare quei personaggi che, pur non occupando un ruolo centrale nella narrazione dei film di Harry Potter, si distinguono per una forte intensità emotiva nelle scene in cui compaiono. \n" 
-            "Questi soggetti possono essere il punto di partenza per la creazione di prequel, spin-off, prodotti derivati e nuove linee di merchandising. \n" ,
-            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em" , "textAlign": "justify", "whiteSpace": "pre-line",},
+            "Uno degli obiettivi principali di questo studio è individuare quei personaggi che, pur non occupando un ruolo centrale nella narrazione dei film di Harry Potter, si distinguono per una forte intensità emotiva nelle scene in cui compaiono. \n"
+            "Questi soggetti possono essere il punto di partenza per la creazione di prequel, spin-off, prodotti derivati e nuove linee di merchandising. \n",
+            style={
+                "marginTop": "30px",
+                "fontSize": "1.1em",
+                "lineHeight": "1.6em",
+                "textAlign": "justify",
+                "whiteSpace": "pre-line",
+            },
         ),
         html.P(
             "Per identificare i personaggi secondari ma emotivamente rilevanti, sono stati applicati tre criteri principali:"
@@ -201,8 +207,14 @@ layout = html.Div(
             "\n- Sociali: out-degree almeno pari alla media;"
             "\n- Emotivamente intensi: entropia emotiva superiore alla media."
             "\nQuesti personaggi, pur non essendo protagonisti, si distinguono per ricchezza emotiva e frequenza nei dialoghi.",
-            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em", "whiteSpace": "pre-line"},
+            style={
+                "marginTop": "30px",
+                "fontSize": "1.1em",
+                "lineHeight": "1.6em",
+                "whiteSpace": "pre-line",
+            },
         ),
+        html.Hr(),
         html.Div(
             [
                 html.Div(
@@ -239,6 +251,7 @@ layout = html.Div(
                 "padding": "20px",
             },
         ),
+        html.Hr(),
         html.Div(
             dcc.Graph(id="heatmap"),
             style={
@@ -246,6 +259,7 @@ layout = html.Div(
                 "padding": "20px",
             },
         ),
+        html.Hr(),
         html.Div(
             dcc.Graph(id="heatmap-2"),
             style={
@@ -264,7 +278,7 @@ layout = html.Div(
         ),
         # dcc.Location(id="page-2-url"),
     ],
-    style={"padding": "10px"},
+    style={"padding": "20px"},
 )
 
 #################################################################################################

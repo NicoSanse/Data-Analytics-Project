@@ -1,5 +1,5 @@
 import dash
-from dash import html, dcc, callback, Input, Output
+from dash import html, dcc, callback, Input, Output, MATCH
 import dash
 from dash import Input, Output, html, dcc, callback
 import plotly.express as px
@@ -28,7 +28,7 @@ dialogs = pd.read_csv(
 )
 
 
-def create_line_plot(top_n, film_id, emotions):
+def create_line_plot(k, film_id, emotions):
 
     centrality_list = []
     for movie_id, group in dialogs.groupby("Movie ID"):
@@ -68,55 +68,65 @@ def create_line_plot(top_n, film_id, emotions):
         .mean()
         .sort_values(ascending=False)
     )
-    central_characters = pagerank_by_char.head(top_n).index.tolist()
+
+    central_characters = pagerank_by_char.index.tolist()
+
+    # Protezione: se top_k va fuori indice
+    if k >= len(central_characters):
+        return go.Figure().update_layout(
+            title="Nessun personaggio disponibile per questo indice."
+        )
+
+    selected_character = central_characters[k]
+    chapters = df_emotions[df_emotions["Movie ID"] == film_id]["Chapter ID"].unique()
+
     # emotion_order = ["sadness", "love", "joy", "anger", "fear", "surprise"] KeyError: 'love' not in index
     emotion_order = emotions
 
-    plots = []
-
-    chapters = df_emotions[df_emotions["Movie ID"] == film_id]["Chapter ID"].unique()
-
-    for character in central_characters:
-        subset = df_emotions[
-            (df_emotions["Movie ID"] == film_id)
-            & (df_emotions["Character Name"] == character)
-        ]
-        if subset.empty:
-            continue
-
-        # Conta emozioni per capitolo
-        pivot = subset.groupby(["Chapter ID", "Emotion"]).size().unstack(fill_value=0)
-        pivot = pivot.reindex(chapters, fill_value=0)
-
-        # Dopo l'unstack
-        for emo in emotion_order:
-            if emo not in pivot.columns:
-                pivot[emo] = 0
-
-        # Re-ordina le colonne
-        pivot = pivot[emotion_order]
-
-        pivot_long = pivot.reset_index().melt(
-            id_vars="Chapter ID",
-            value_vars=emotion_order,
-            var_name="Emotion",
-            value_name="Count",
+    subset = df_emotions[
+        (df_emotions["Movie ID"] == film_id)
+        & (df_emotions["Character Name"] == selected_character)
+    ]
+    if subset.empty:
+        return go.Figure().update_layout(
+            title=f"Nessuna emozione trovata per {selected_character}."
         )
 
-        fig = px.line(
-            pivot_long,
-            x="Chapter ID",
-            y="Count",
-            color="Emotion",
-            title=f"Andamento delle emozioni per {character} in '{film_id}'",
-            labels={"Chapter": "Capitolo", "Count": "Conteggio"},
-        )
+    # Conta emozioni per capitolo
+    pivot = subset.groupby(["Chapter ID", "Emotion"]).size().unstack(fill_value=0)
+    pivot = pivot.reindex(chapters, fill_value=0)
 
-        fig.update_layout(legend_title_text="Emozione")
+    # Dopo l'unstack
+    for emo in emotion_order:
+        if emo not in pivot.columns:
+            pivot[emo] = 0
 
-        plots.append(fig)
+    # Re-ordina le colonne
+    pivot = pivot[emotion_order]
 
-    return plots
+    pivot_long = pivot.reset_index().melt(
+        id_vars="Chapter ID",
+        value_vars=emotion_order,
+        var_name="Emotion",
+        value_name="Count",
+    )
+
+    fig = px.line(
+        pivot_long,
+        x="Chapter ID",
+        y="Count",
+        color="Emotion",
+        labels={"Chapter": "Capitolo", "Count": "Conteggio"},
+    )
+
+    fig.update_layout(
+        legend_title_text="Emozione",
+        title=dict(
+            text=f"Andamento delle emozioni per <b>{selected_character.title()}</b> nel film {film_id}"
+        ),
+    )
+
+    return fig
 
 
 #################################################################################################
@@ -128,8 +138,14 @@ layout = html.Div(
         html.P(
             "Analizzare i pattern emotivi dei protagonisti nelle storie di successo è fondamentale per ideare nuove trame coinvolgenti. In questo studio, ci siamo focalizzati sui personaggi principali della saga di Harry Potter,"
             "esaminando l’evoluzione delle loro emozioni nei film per individuare archetipi emotivi trasferibili ad altri franchise. \n"
-            "La selezione dei protagonisti è stata basata sulla loro centralità narrativa, misurata tramite il valore medio di Pagerank nei grafi delle interazioni. Vengono così identificati i personaggi più influenti e connessi all’interno della storia.\n" ,
-            style={"marginTop": "30px", "fontSize": "1.1em", "lineHeight": "1.6em" , "textAlign": "justify", "whiteSpace": "pre-line",},
+            "La selezione dei protagonisti è stata basata sulla loro centralità narrativa, misurata tramite il valore medio di Pagerank nei grafi delle interazioni. Vengono così identificati i personaggi più influenti e connessi all’interno della storia.\n",
+            style={
+                "marginTop": "30px",
+                "fontSize": "1.1em",
+                "lineHeight": "1.6em",
+                "textAlign": "justify",
+                "whiteSpace": "pre-line",
+            },
         ),
         html.Div(
             children=[
@@ -171,28 +187,13 @@ layout = html.Div(
                     style={"display": "flex", "gap": "20px"},
                 ),
                 html.Div(
-                    children=[
-                        html.Label(
-                            "Movie ID:",
-                            style={"fontWeight": "bold", "marginBottom": "5px"},
-                        ),
-                        dcc.Slider(
-                            id="movie-id",
-                            min=1,
-                            max=8,
-                            value=1,
-                            step=1,
-                        ),
-                    ]
+                    id="plots-container",
+                    style={
+                        "margin": "0 auto",
+                        "padding": "20px",
+                    },
                 ),
             ]
-        ),
-        html.Div(
-            id="plots-container",
-            style={
-                "margin": "0 auto",
-                "padding": "20px",
-            },
         ),
         html.Div(
             [
@@ -212,19 +213,53 @@ layout = html.Div(
 
 
 @callback(
-    Output("plots-container", "children"),
+    Output({"type": "plots-character", "index": MATCH}, "figure"),
     [
-        Input("top-n", "value"),
-        Input("movie-id", "value"),
+        Input({"type": "movie-id-character", "index": MATCH}, "value"),
         Input("emotion-multiselect", "value"),
     ],
 )
-def update_line_plot(top_n, movie_id, emotions):
-    plots = create_line_plot(top_n, movie_id, emotions)
+def update_line_plot(movie_id, emotions):
+    top_k = dash.callback_context.inputs_list[0]["id"]["index"]
+
+    try:
+        return create_line_plot(top_k, movie_id, emotions)
+    except Exception as e:
+        print("ERROR IN CALLBACK:", e)
+        raise e
+
+
+@callback(
+    Output("plots-container", "children"),
+    [
+        Input("top-n", "value"),
+    ],
+)
+def update_line_plot(top_n):
+
     children = []
-    for fig in plots:
-        children.append(dcc.Graph(figure=fig))
-        children.append(html.Hr())
+
+    for top_k in range(top_n):
+        div = [
+            html.Label(
+                "Movie ID:",
+                style={"fontWeight": "bold", "marginBottom": "5px"},
+            ),
+            dcc.Slider(
+                id={"type": "movie-id-character", "index": top_k},
+                min=1,
+                max=8,
+                value=1,
+                step=1,
+            ),
+            dcc.Graph(
+                id={"type": "plots-character", "index": top_k},
+                config={"displayModeBar": False},
+                style={"marginTop": "20px"},
+            ),
+            html.Hr(),
+        ]
+        children.extend(div)
 
     return children
 
