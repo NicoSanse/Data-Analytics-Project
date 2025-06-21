@@ -33,10 +33,10 @@ layout = html.Div(
                     },
                 ),
                 html.P(
-                    'Nel settore dell’intrattenimento, la capacità di analizzare scientificamente le dinamiche emotive di personaggi e storie è la chiave per il successo di ogni franchise. \n' 
-                    'Questa dashboard nasce per esplorare la saga di Harry Potter con un approccio data-driven: analizziamo emozioni, dialoghi e relazioni nei film per fornire strumenti concreti a chi crea, promuove e valorizza prodotti narrativi, '
-                    'con l’obiettivo di scoprire nuove storie da raccontare, personalizzare il marketing e ispirare la prossima generazione di successi fantasy. \n' 
-                    'Lo studio si articola in 4 fasi:' ,
+                    "Nel settore dell’intrattenimento, la capacità di analizzare scientificamente le dinamiche emotive di personaggi e storie è la chiave per il successo di ogni franchise. \n"
+                    "Questa dashboard nasce per esplorare la saga di Harry Potter con un approccio data-driven: analizziamo emozioni, dialoghi e relazioni nei film per fornire strumenti concreti a chi crea, promuove e valorizza prodotti narrativi, "
+                    "con l’obiettivo di scoprire nuove storie da raccontare, personalizzare il marketing e ispirare la prossima generazione di successi fantasy. \n"
+                    "Lo studio si articola in 4 fasi:",
                     style={
                         "marginTop": "30px",
                         "fontSize": "1.1em",
@@ -54,7 +54,9 @@ layout = html.Div(
                         html.Li(
                             "Ricerca di correlazione tra emozione rilevata e Casa a fine di marketing."
                         ),
-                        html.Li("Sviluppo di un raccomandatore di scene per emozione per suggerire automaticamente le scene di maggior impatto emotivo, utili sia in contesti di fruizione che di promozione."),
+                        html.Li(
+                            "Sviluppo di un raccomandatore di scene per emozione per suggerire automaticamente le scene di maggior impatto emotivo, utili sia in contesti di fruizione che di promozione."
+                        ),
                     ],
                     style={"marginTop": "20px", "fontSize": "1.05em"},
                 ),
@@ -71,12 +73,12 @@ layout = html.Div(
                     },
                 ),
                 html.P(
-                    "Autori: Alessia Novacco, Nicolò Sansevrino",
+                    "Componenti: Alessia Novacco, Nicolò Sansevrino",
                     style={
                         "marginTop": "40px",
                         "textAlign": "center",
                         "fontSize": "1.1em",
-                        "color": "#CCCCCC",
+                        "color": "#7B7B7BFF",
                     },
                 ),
             ],
@@ -87,6 +89,7 @@ layout = html.Div(
             },
         ),
     ],
+    className="page-enter",
 )
 
 

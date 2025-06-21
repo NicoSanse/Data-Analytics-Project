@@ -278,6 +278,7 @@ layout = html.Div(
         # dcc.Location(id="page-2-url"),
     ],
     style={"padding": "20px"},
+    className="page-enter",
 )
 
 #################################################################################################

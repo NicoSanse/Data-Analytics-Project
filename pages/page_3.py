@@ -206,6 +206,7 @@ layout = html.Div(
         ),
     ],
     style={"padding": "20px"},
+    className="page-enter",
 )
 
 

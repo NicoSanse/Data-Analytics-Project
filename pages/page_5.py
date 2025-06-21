@@ -12,33 +12,45 @@ final_df_nrc = pd.read_csv(path_final_df_nrc, encoding="utf-8-sig")
 layout = html.Div(
     [
         html.H1("Raccomandatore di scene per emozione", style={"marginBottom": "10px"}),
-        html.P("Seleziona un'emozione per scoprire le scene più intense della saga:", style={"fontSize": "1.1em"}),
-        html.Div([
-            html.Label("Emozione:", style={"fontWeight": "bold", "marginRight": "10px"}),
-            dcc.Dropdown(
-                id="emotion-dropdown",
-                options=[
-                    {"label": "Gioia", "value": "joy"},
-                    {"label": "Rabbia", "value": "anger"},
-                    {"label": "Paura", "value": "fear"},
-                    {"label": "Tristezza", "value": "sadness"},
-                    {"label": "Amore", "value": "love"},
-                    {"label": "Sorpresa", "value": "surprise"},
-                ],
-                value="joy",
-                clearable=False,
-                style={"width": "260px"},
-            ),
-        ], style={"margin": "28px 0"}),
+        html.P(
+            "Seleziona un'emozione per scoprire le scene più intense della saga:",
+            style={"fontSize": "1.1em"},
+        ),
+        html.Div(
+            [
+                html.Label(
+                    "Emozione:", style={"fontWeight": "bold", "marginRight": "10px"}
+                ),
+                dcc.Dropdown(
+                    id="emotion-dropdown",
+                    options=[
+                        {"label": "Gioia", "value": "joy"},
+                        {"label": "Rabbia", "value": "anger"},
+                        {"label": "Paura", "value": "fear"},
+                        {"label": "Tristezza", "value": "sadness"},
+                        {"label": "Amore", "value": "love"},
+                        {"label": "Sorpresa", "value": "surprise"},
+                    ],
+                    value="joy",
+                    clearable=False,
+                    style={"width": "260px"},
+                ),
+            ],
+            style={"margin": "28px 0"},
+        ),
         html.Div(id="scene-recommendations"),
-        html.Div([
-            html.Button("← Pagina precedente", id="prev-page", n_clicks=0),
-            dcc.Location(id="from-page-5-to-page-4-url"),
-            html.Button("Prossima pagina →", id="next-page", n_clicks=0),
-            dcc.Location(id="from-page-5-to-page-6-url"),
-        ], style={"marginTop": "40px", "display": "flex", "gap": "10px"}),
+        html.Div(
+            [
+                html.Button("← Pagina precedente", id="prev-page", n_clicks=0),
+                dcc.Location(id="from-page-5-to-page-4-url"),
+                html.Button("Prossima pagina →", id="next-page", n_clicks=0),
+                dcc.Location(id="from-page-5-to-page-6-url"),
+            ],
+            style={"marginTop": "40px", "display": "flex", "gap": "10px"},
+        ),
     ],
     style={"maxWidth": "800px", "margin": "0 auto", "padding": "38px 12px"},
+    className="page-enter",
 )
 
 @callback(

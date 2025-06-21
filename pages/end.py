@@ -31,6 +31,7 @@ layout = html.Div(
         "flexDirection": "column",
         "alignItems": "center",
     },
+    className="page-enter",
 )
 
 

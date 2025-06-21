@@ -95,7 +95,7 @@ for mid, g in dialogs.groupby("Movie ID"):
     )"""
 
     # Usa pesi per le centralità
-    degree_c = nx.degree_centrality(G)  # NON usa pesi (opzionale)
+    degree_c = nx.degree_centrality(G)
     in_deg = G.in_degree(weight="weight")
     out_deg = G.out_degree(weight="weight")
     pagerank = nx.pagerank(G, weight="weight")
@@ -198,6 +198,7 @@ layout = html.Div(
         dcc.Location(id="from-page-1-to-page-2-url"),
     ],
     style={"padding": "20px"},
+    className="page-enter",
 )
 
 
@@ -361,6 +362,7 @@ def networkx_to_plotly(G, cut_threshold):
         text=node_text,
         textposition="top center",
         hoverinfo="text",
+        hovertext=info_node,
         marker=dict(
             showscale=True,
             colorscale="YlGnBu",
