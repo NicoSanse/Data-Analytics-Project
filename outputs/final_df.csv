@@ -1,22 +1,22 @@
 ﻿,Film,Capitolo,Emozione,Intensità_media,Riassunto_narrativo
 0,1,7,joy,0.97,"It's Harry Potter's birthday today. It seems like only yesterday that his parents were buying their first wands. The phoenix whose tail feather resides in your wand gave one feather to its brother, who gave you that scar."
 1,1,32,joy,0.91,Harry got the Stone. Flamel will die. Professor Quirrell couldn't let Harry touch the Stone because of his mother's sacrifice.
-2,2,53,joy,0.9,"Professor Dumbledore's bird caught on fire. Harry suspects it was him. Dumbledore says it was Mr. Filch, not Harry."
-3,3,77,joy,0.9,Professor Lupin will be the new Defense Against the Dark Arts teacher at Hogwarts. Rubeus Hagrid will replace Professor Lupin as the Care of Magical Creatures teacher. Hogwarts will be host to the dementors of Azkaban until such a time as Sirius Black is captured.
-4,4,107,joy,0.9,Viktor has been discovered at the scene of the crime. He has a scar on his face that worries his father Ron.
-5,4,121,anger,0.97,Mr Diggory has won the task. Miss Delacour has been forced to retire. Harry saved her even though she wasn't his sister.
-6,3,83,anger,0.96,Professor Potter's professor is incapable of teaching at the present time. Mr. Malfoy wants to know when she came in and who can tell him the difference between Animagus and a werewolf.
-7,4,111,anger,0.9,Harry Potter's friend Ron Weasley is upset because he didn't win the competition tonight. Master finds it difficult to believe it's a coincidence.
+2,2,19,joy,0.9,"Professor Dumbledore's bird caught on fire. Harry suspects it was him. Dumbledore says it was Mr. Filch, not Harry."
+3,3,3,joy,0.9,Professor Lupin will be the new Defense Against the Dark Arts teacher at Hogwarts. Rubeus Hagrid will replace Professor Lupin as the Care of Magical Creatures teacher. Hogwarts will be host to the dementors of Azkaban until such a time as Sirius Black is captured.
+4,4,1,joy,0.9,Viktor has been discovered at the scene of the crime. He has a scar on his face that worries his father Ron.
+5,4,15,anger,0.97,Mr Diggory has won the task. Miss Delacour has been forced to retire. Harry saved her even though she wasn't his sister.
+6,3,9,anger,0.96,Professor Potter's professor is incapable of teaching at the present time. Mr. Malfoy wants to know when she came in and who can tell him the difference between Animagus and a werewolf.
+7,4,5,anger,0.9,Harry Potter's friend Ron Weasley is upset because he didn't win the competition tonight. Master finds it difficult to believe it's a coincidence.
 8,1,7,anger,0.87,"It's Harry Potter's birthday today. It seems like only yesterday that his parents were buying their first wands. The phoenix whose tail feather resides in your wand gave one feather to its brother, who gave you that scar."
-9,2,64,anger,0.87,"Lockhart's memory charm backfired and he doesn't know who he is. Harry, Ron and Harry Potter lost their minds at the sight of the girl."
-10,2,62,fear,0.98,Hermione was in the Library the day she was attacked. The monster in the Chamber of Secrets is a basilisk. A student has been taken by the monster into the Chamber itself.
+9,2,30,anger,0.87,"Lockhart's memory charm backfired and he doesn't know who he is. Harry, Ron and Harry Potter lost their minds at the sight of the girl."
+10,2,28,fear,0.98,Hermione was in the Library the day she was attacked. The monster in the Chamber of Secrets is a basilisk. A student has been taken by the monster into the Chamber itself.
 11,1,21,fear,0.97,"Harry, Ron and Hermione are trying to figure out why Snape put a curse on Harry's broom and why he was trying to get past that three-headed dog on Halloween. Ron's parents decided to go to Romania to visit his brother Charlie, who's studying dragons there. Harry's mum made him a present."
 12,1,30,fear,0.95,Harry Potter has won the House Cup. He is shaking hands with Dumbledore. He claims that Snape tried to kill him during the Quidditch match.
 13,1,20,fear,0.93,Snape is jinxing Harry's broomstick. Harry Potter catches the Snitch and Gryffindor win the game.
 14,1,4,fear,0.93,Harry Potter has been accepted at Hogwarts' School of Witchcraft and Wizardry. Harry's sister was a witch and his parents died in a car crash. Dursley is angry and wants Harry to leave.
-15,4,129,sadness,0.98,Alastor Moody stole gilliweed from Albus' store. He will be welcomed back to Hogwarts like a hero.
+15,4,23,sadness,0.98,Alastor Moody stole gilliweed from Albus' store. He will be welcomed back to Hogwarts like a hero.
 16,1,5,sadness,0.98,Professor Quirrell will be Harry Potter's Defense Against the Dark Arts teacher at Hogwarts. Doris Crockford is happy to see Harry. Hagrid wonders why Harry is famous.
-17,2,39,sadness,0.98,"Hermione was lost in Diagon Alley. Harry, Hagrid and Hermione were looking for her. She was wearing Oculus reparo."
+17,2,5,sadness,0.98,"Hermione was lost in Diagon Alley. Harry, Hagrid and Hermione were looking for her. She was wearing Oculus reparo."
 18,1,15,sadness,0.96,"Madam Hooch instructs Harry, Neville and Mr. Longbottom how to ride their broom. Harry has never played Quidditch before. Oliver Wood has found him a Seeker. Harry's father was a Seeker."
 19,1,25,sadness,0.95,"Draco, Harry, Harry Potter and Fang are going into the forest to look for Norbert, who was sent to Romania to live in a colony by Dumbledore. Harry is scared."
 20,1,1,love,,Professor McGonagall would trust Hagrid with her life. Hagrid is the only family he has. It's not really goodbye after all.
@@ -24,8 +24,8 @@
 22,3,1,love,,N/A (no dialogues available for this chapter)
 23,4,1,love,,N/A (no dialogues available for this chapter)
 24,5,1,love,,N/A (no dialogues available for this chapter)
-25,3,97,surprise,0.94,"Sirius Black is in the topmost cell of the Dark Tower. If Hermione doesn't return before the last chime, she will be killed."
-26,2,68,surprise,0.91,Mr. Weasley wants Harry to have an owl deliver the release papers to Azkaban. Harry notices similarities between Tom Riddle and Voldemort. Voldemort can speak Parseltongue. Voldemort transferred some powers to Harry the night he gave him a scar. Harry should be in Slytherin.
-27,2,67,surprise,0.89,Ginny hurt Harry. Riddle made her do it. Ron helped her escape. Harry and Ron will find her soon.
-28,4,107,surprise,0.85,Viktor has been discovered at the scene of the crime. He has a scar on his face that worries his father Ron.
-29,4,104,surprise,0.84,The boy might be able to do it without the boy if they were to do the same thing without him. He's not a bad kid.
+25,3,23,surprise,0.94,"Sirius Black is in the topmost cell of the Dark Tower. If Hermione doesn't return before the last chime, she will be killed."
+26,2,34,surprise,0.91,Mr. Weasley wants Harry to have an owl deliver the release papers to Azkaban. Harry notices similarities between Tom Riddle and Voldemort. Voldemort can speak Parseltongue. Voldemort transferred some powers to Harry the night he gave him a scar. Harry should be in Slytherin.
+27,2,33,surprise,0.89,Ginny hurt Harry. Riddle made her do it. Ron helped her escape. Harry and Ron will find her soon.
+28,4,4,surprise,0.85,Viktor has been discovered at the scene of the crime. He has a scar on his face that worries his father Ron.
+29,3,3,surprise,0.84,The boy might be able to do it without the boy if they were to do the same thing without him. He's not a bad kid.
