@@ -5,9 +5,10 @@ import os
 
 dash.register_page(__name__)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-path_final_df_nrc = os.path.join("outputs/final_df.csv")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path_final_df_nrc = os.path.join(BASE_DIR, "outputs", "final_df.csv")
 final_df_nrc = pd.read_csv(path_final_df_nrc, encoding="utf-8-sig")
+
 
 layout = html.Div(
     [
